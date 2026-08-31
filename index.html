@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Programa de Entrenamiento General · 12 semanas</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
+
+:root{
+  --bg:#1B211F;
+  --bg-panel:#232B28;
+  --bg-card:#28332F;
+  --line:#3B463F;
+  --chalk:#E6EDE6;
+  --chalk-dim:#9EB7AB;
+  --iron:#3E9C6E;
+  --iron-dim:#2E7A54;
+  --steel:#7C9BA3;
+  --olive:#94A363;
+  --radius:2px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--chalk);
+  font-family:'IBM Plex Sans',sans-serif;
+  padding:28px 18px 60px;
+}
+.wrap{max-width:900px;margin:0 auto;}
+
+header{margin-bottom:22px;}
+h1{
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  font-size:clamp(28px,5vw,40px);
+  letter-spacing:0.3px;
+  margin:0 0 6px;
+  color:var(--chalk);
+  line-height:1.05;
+}
+.subtitle{
+  color:var(--chalk-dim);
+  font-size:15px;
+  max-width:60ch;
+  line-height:1.5;
+  margin:0 0 18px;
+}
+.stat-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  margin-bottom:26px;
+}
+.stat{
+  background:var(--bg-panel);
+  padding:12px 16px;
+  flex:1 1 130px;
+}
+.stat b{
+  display:block;
+  font-family:'Oswald',sans-serif;
+  font-size:20px;
+  color:var(--iron);
+}
+.stat span{font-size:12.5px;color:var(--chalk-dim);}
+
+nav.tabs{
+  display:flex;
+  border-bottom:2px solid var(--line);
+  margin-bottom:24px;
+}
+nav.tabs button{
+  font-family:'Oswald',sans-serif;
+  font-size:16px;
+  letter-spacing:0.2px;
+  background:none;
+  border:none;
+  color:var(--chalk-dim);
+  padding:10px 4px;
+  margin-right:26px;
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  margin-bottom:-2px;
+}
+nav.tabs button.active{color:var(--chalk);border-bottom-color:var(--iron);}
+nav.tabs button:hover{color:var(--chalk);}
+
+.panel{display:none;}
+.panel.active{display:block;}
+
+.block-legend{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  margin-bottom:20px;
+}
+.block-legend div{background:var(--bg-panel);padding:10px 10px;}
+.block-legend .bnum{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--iron);}
+.block-legend .btitle{font-family:'Oswald',sans-serif;font-size:14.5px;margin:2px 0 3px;}
+.block-legend .bdesc{font-size:11.5px;color:var(--chalk-dim);line-height:1.35;}
+
+.week-picker{margin-bottom:22px;}
+.week-picker .label{font-size:12.5px;color:var(--chalk-dim);margin-bottom:8px;}
+.weeks{display:flex;flex-wrap:wrap;gap:6px;}
+.weeks button{
+  width:34px;height:34px;
+  border:1px solid var(--line);
+  background:var(--bg-panel);
+  color:var(--chalk-dim);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:13px;
+  cursor:pointer;
+  border-radius:var(--radius);
+}
+.weeks button.active{background:var(--iron);border-color:var(--iron);color:var(--chalk);}
+
+.week-heading{
+  font-family:'Oswald',sans-serif;
+  font-size:19px;
+  margin:0 0 4px;
+}
+.week-note{font-size:13px;color:var(--chalk-dim);margin:0 0 18px;}
+
+.day-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  margin-bottom:16px;
+}
+.day-head{
+  padding:12px 16px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+}
+.day-head h3{
+  font-family:'Oswald',sans-serif;
+  font-weight:500;
+  font-size:16.5px;
+  margin:0;
+  color:var(--chalk);
+}
+.day-head .foco{font-size:12px;color:var(--chalk-dim);}
+.ex-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  padding:10px 16px;
+  border-top:1px solid var(--line);
+}
+.ex-row:first-of-type{border-top:none;}
+.ex-row.main{border-left:3px solid var(--iron);background:rgba(62,156,110,0.08);}
+.ex-row.done .ex-name{opacity:0.5;text-decoration:line-through;}
+.ex-row.done .ex-tag{opacity:0.5;}
+.ex-name{font-size:14.5px;}
+.ex-tag{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  color:var(--chalk-dim);
+  display:block;
+  margin-top:2px;
+}
+.ex-scheme{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:13.5px;
+  color:var(--iron);
+  white-space:nowrap;
+  text-align:right;
+}
+.ex-scheme small{display:block;color:var(--chalk-dim);font-size:10.5px;margin-top:1px;}
+
+.progress-note{
+  font-size:12.5px;
+  color:var(--chalk-dim);
+  border-left:2px solid var(--steel);
+  padding:8px 12px;
+  margin-top:18px;
+  line-height:1.5;
+}
+
+/* swap tab */
+.swap-intro{font-size:13.5px;color:var(--chalk-dim);margin-bottom:20px;line-height:1.55;max-width:62ch;}
+.swap-day-title{
+  font-family:'Oswald',sans-serif;
+  font-size:15px;
+  color:var(--steel);
+  margin:22px 0 8px;
+}
+.swap-row{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  padding:12px 14px;
+  margin-bottom:8px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+  justify-content:space-between;
+}
+.swap-left{min-width:200px;}
+.swap-group{font-size:11px;color:var(--chalk-dim);text-transform:none;}
+.swap-current{font-size:14.5px;margin-top:2px;}
+.swap-current.changed{color:var(--iron);}
+.swap-controls{display:flex;gap:8px;align-items:center;}
+select{
+  background:var(--bg-panel);
+  color:var(--chalk);
+  border:1px solid var(--line);
+  padding:7px 9px;
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:13px;
+  border-radius:var(--radius);
+  max-width:230px;
+}
+.reset-btn{
+  background:none;
+  border:1px solid var(--line);
+  color:var(--chalk-dim);
+  font-size:12px;
+  padding:6px 10px;
+  cursor:pointer;
+  border-radius:var(--radius);
+}
+.reset-btn:hover{color:var(--chalk);border-color:var(--steel);}
+.reset-all{
+  background:none;
+  border:1px solid var(--iron-dim);
+  color:var(--iron);
+  font-family:'Oswald',sans-serif;
+  font-size:13px;
+  padding:9px 16px;
+  cursor:pointer;
+  margin-top:22px;
+  border-radius:var(--radius);
+}
+.reset-all:hover{background:rgba(62,156,110,0.12);}
+
+.guide-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  margin-bottom:16px;
+}
+.guide-head{
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.guide-head h3{
+  font-family:'Oswald',sans-serif;
+  font-weight:500;
+  font-size:18px;
+  margin:0;
+  color:var(--chalk);
+}
+.guide-head .foco{font-size:12px;color:var(--chalk-dim);}
+.guide-title-wrap{min-width:0;}
+.guide-original-name{display:block;font-size:11px;color:var(--chalk-dim);margin-top:2px;}
+.guide-head-actions{display:flex;align-items:center;gap:8px;flex:none;}
+.icon-btn{
+  background:none;
+  border:1px solid var(--line);
+  color:var(--chalk-dim);
+  width:28px;height:28px;
+  border-radius:var(--radius);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex:none;
+}
+.icon-btn:hover{color:var(--chalk);border-color:var(--steel);}
+.rename-input{
+  flex:1;
+  min-width:120px;
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  color:var(--chalk);
+  font-family:'Oswald',sans-serif;
+  font-size:16px;
+  padding:7px 9px;
+  border-radius:var(--radius);
+}
+.guide-section{padding:12px 16px;border-top:1px solid var(--line);}
+.guide-section:first-of-type{border-top:none;}
+.guide-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:var(--iron);
+  text-transform:uppercase;
+  letter-spacing:0.4px;
+  margin:0 0 5px;
+}
+.guide-text{margin:0;font-size:13.5px;color:var(--chalk-dim);line-height:1.55;}
+
+.search-box{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  padding:10px 14px;
+  margin-bottom:14px;
+  border-radius:var(--radius);
+}
+.search-box svg{flex:none;color:var(--chalk-dim);}
+.search-box input{
+  flex:1;
+  min-width:0;
+  background:none;
+  border:none;
+  outline:none;
+  color:var(--chalk);
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:14px;
+}
+.search-box input::placeholder{color:var(--chalk-dim);}
+
+.guide-results{
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  margin-bottom:16px;
+  max-height:300px;
+  overflow-y:auto;
+}
+.guide-result{
+  background:var(--bg-panel);
+  padding:10px 14px;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.guide-result:hover{background:var(--bg-card);}
+.guide-result.active{background:rgba(62,156,110,0.15);border-left:3px solid var(--iron);}
+.guide-result .rname{font-size:13.5px;}
+.guide-result .rgroup{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  color:var(--chalk-dim);
+  white-space:nowrap;
+}
+.guide-empty{padding:14px;font-size:13px;color:var(--chalk-dim);}
+
+/* chips de grupo muscular */
+.group-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.chip{
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  color:var(--chalk-dim);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  padding:6px 11px;
+  border-radius:14px;
+  cursor:pointer;
+}
+.chip:hover{color:var(--chalk);border-color:var(--steel);}
+.chip.active{background:var(--iron);border-color:var(--iron);color:var(--chalk);}
+
+/* diagrama esquemático del ejercicio */
+.guide-pose{
+  padding:18px 16px 10px;
+  display:flex;
+  justify-content:center;
+  background:var(--bg-panel);
+}
+.guide-pose svg{width:160px;height:160px;}
+.guide-pose .pose-body{stroke:var(--chalk-dim);fill:none;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;}
+.guide-pose .pose-head{fill:var(--chalk-dim);stroke:none;}
+.guide-pose .pose-furniture{fill:var(--line);stroke:none;}
+.guide-pose .pose-eq{stroke:var(--iron);fill:none;stroke-width:5;stroke-linecap:round;}
+.guide-pose .pose-eq-thin{stroke:var(--iron);fill:none;stroke-width:2.5;stroke-linecap:round;}
+.guide-pose .pose-eq-fill{fill:var(--iron);stroke:none;}
+.guide-pose .pose-floor{stroke:var(--line);stroke-width:2;stroke-linecap:round;}
+
+/* registro de cargas + checklist dentro de cada ejercicio */
+.ex-row{flex-wrap:wrap;}
+.ex-extra{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-left:auto;
+}
+.load-input{
+  width:58px;
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  color:var(--chalk);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12.5px;
+  padding:5px 6px;
+  border-radius:var(--radius);
+  text-align:right;
+}
+.load-input::placeholder{color:var(--chalk-dim);}
+.load-unit{font-size:10.5px;color:var(--chalk-dim);}
+.timer-btn{
+  background:none;
+  border:1px solid var(--line);
+  color:var(--chalk-dim);
+  width:28px;height:28px;
+  border-radius:var(--radius);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex:none;
+}
+.timer-btn:hover{color:var(--chalk);border-color:var(--steel);}
+.done-check{
+  width:18px;height:18px;
+  accent-color:var(--iron);
+  cursor:pointer;
+  flex:none;
+}
+.week-actions{margin:-10px 0 18px;}
+.reset-week-btn{
+  background:none;
+  border:1px solid var(--line);
+  color:var(--chalk-dim);
+  font-size:12px;
+  padding:6px 10px;
+  cursor:pointer;
+  border-radius:var(--radius);
+}
+.reset-week-btn:hover{color:var(--chalk);border-color:var(--steel);}
+
+/* timer de descanso flotante */
+.rest-timer{
+  position:fixed;
+  left:0;right:0;bottom:0;
+  background:var(--bg-panel);
+  border-top:2px solid var(--iron);
+  padding:12px 18px calc(12px + env(safe-area-inset-bottom));
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  z-index:50;
+  max-width:900px;
+  margin:0 auto;
+}
+.rest-timer.active{display:flex;}
+.rest-timer .rt-label{font-size:12px;color:var(--chalk-dim);}
+.rest-timer .rt-clock{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:22px;
+  color:var(--iron);
+}
+.rest-timer .rt-controls{display:flex;gap:8px;}
+.rest-timer button.rt-btn{
+  background:none;
+  border:1px solid var(--line);
+  color:var(--chalk-dim);
+  font-size:12px;
+  padding:6px 10px;
+  cursor:pointer;
+  border-radius:var(--radius);
+}
+.rest-timer button.rt-btn:hover{color:var(--chalk);border-color:var(--steel);}
+
+/* ---------- Responsive real en mobile ---------- */
+@media (max-width:520px){
+  body{padding:20px 12px 90px;}
+  h1{font-size:24px;}
+  .subtitle{font-size:14px;}
+  .stat{flex:1 1 45%;}
+  .block-legend{grid-template-columns:1fr 1fr;}
+  nav.tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
+  nav.tabs button{margin-right:16px;font-size:14px;white-space:nowrap;}
+  .day-head{flex-direction:column;align-items:flex-start;gap:3px;}
+  .ex-row{align-items:flex-start;padding:12px 14px;gap:8px;}
+  .ex-row>div:first-child{flex:1 1 100%;}
+  .ex-scheme{text-align:left;}
+  .ex-extra{margin-left:0;width:100%;justify-content:space-between;}
+  .swap-row{flex-direction:column;align-items:stretch;}
+  .swap-controls{width:100%;}
+  select{max-width:none;width:100%;}
+  .guide-head{flex-direction:column;align-items:flex-start;gap:3px;}
+  .search-box input{font-size:16px;}
+  .rest-timer{flex-wrap:wrap;padding:10px 14px calc(10px + env(safe-area-inset-bottom));}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Programa de entrenamiento general · 12 semanas</h1>
+  <p class="subtitle">Full body en déficit calórico moderado para mantener la masa muscular mientras bajás de peso: 3 sesiones semanales de máximo 90 minutos, tocando cada grupo muscular importante varias veces por semana, con volumen ajustado para no acumular fatiga excesiva.</p>
+  <div class="stat-row">
+    <div class="stat"><b>3x</b><span>sesiones por semana</span></div>
+    <div class="stat"><b>≤90'</b><span>por sesión</span></div>
+    <div class="stat"><b>12</b><span>semanas / 3 bloques</span></div>
+    <div class="stat"><b>2+3</b><span>ejercicios por día</span></div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="rutina">Rutina</button>
+  <button class="tab-btn" data-tab="cambiar">Cambiar ejercicios</button>
+  <button class="tab-btn" data-tab="guia">Cómo hacerlo</button>
+  <button class="tab-btn" data-tab="info">Info general</button>
+</nav>
+
+<section id="panel-rutina" class="panel active">
+
+  <div class="block-legend">
+    <div><span class="bnum">SEM 1–4</span><div class="btitle">Adaptación</div><div class="bdesc">3×12-15 · RPE 6–7. Técnica y activación de todos los grupos musculares.</div></div>
+    <div><span class="bnum">SEM 5–8</span><div class="btitle">Intensificación</div><div class="bdesc">4×10-12 · RPE 7–8. Sube la carga, mantené la técnica bajo fatiga.</div></div>
+    <div><span class="bnum">SEM 9–12</span><div class="btitle">Consolidación</div><div class="bdesc">4×8-10 · RPE 8. Prioridad: sostener la fuerza mientras el déficit se profundiza.</div></div>
+  </div>
+
+  <div class="week-picker">
+    <div class="label">Elegí la semana</div>
+    <div class="weeks" id="weekButtons"></div>
+  </div>
+
+  <h2 class="week-heading" id="weekHeading"></h2>
+  <p class="week-note" id="weekNote"></p>
+  <div class="week-actions">
+    <button class="reset-week-btn" id="resetWeekCheck">Reiniciar checklist de esta semana</button>
+  </div>
+  <div id="daysContainer"></div>
+
+  <p class="progress-note">Progresión doble dentro de cada bloque: si completás todas las series en el techo de repeticiones con buena técnica y sin llegar al fallo, la semana siguiente sumá carga (2 kg tren superior, 2.5-5 kg tren inferior) y volvé al piso de reps del bloque. Si no llegás al piso de reps dos sesiones seguidas, repetí la carga. En déficit la recuperación es más lenta: si llegás muy justo de energía a una sesión, está bien repetir el peso de la semana anterior en vez de forzar el aumento.</p>
+
+</section>
+
+<section id="panel-cambiar" class="panel">
+  <p class="swap-intro">Elegí la semana y después reemplazá cualquier ejercicio por una alternativa del mismo grupo muscular. El cambio aplica solo a esa semana puntual — las demás semanas del programa quedan intactas.</p>
+
+  <div class="week-picker">
+    <div class="label">Semana a editar</div>
+    <div class="weeks" id="swapWeekButtons"></div>
+  </div>
+
+  <h2 class="week-heading" id="swapWeekHeading"></h2>
+  <div id="swapContainer"></div>
+  <button class="reset-all" id="resetAll">Restablecer todos los ejercicios de todas las semanas</button>
+</section>
+
+<section id="panel-guia" class="panel">
+  <p class="swap-intro">Buscá un ejercicio para ver cómo armarlo, cómo ejecutarlo y los errores más comunes a evitar.</p>
+
+  <div class="search-box">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <input type="text" id="guideSearch" placeholder="Buscar ejercicio (ej: sentadilla, remo, curl...)" autocomplete="off">
+  </div>
+
+  <div class="group-chips" id="groupChips"></div>
+
+  <div class="guide-results" id="guideResults"></div>
+  <div id="guideCard"></div>
+</section>
+
+<section id="panel-info" class="panel">
+  <p class="swap-intro">Términos que vas a ver a lo largo del programa, explicados en criollo.</p>
+  <div id="infoContainer"></div>
+</section>
+
+</div>
+
+<div class="rest-timer" id="restTimer">
+  <div>
+    <div class="rt-label" id="rtLabel">Descanso</div>
+    <div class="rt-clock" id="rtClock">01:30</div>
+  </div>
+  <div class="rt-controls">
+    <button class="rt-btn" id="rtMinus15">-15s</button>
+    <button class="rt-btn" id="rtPause">Pausar</button>
+    <button class="rt-btn" id="rtPlus15">+15s</button>
+    <button class="rt-btn" id="rtClose">Cerrar</button>
+  </div>
+</div>
+
+<script>
+// ---------- Almacenamiento local (registro de cargas y checklist) ----------
+// Intenta usar localStorage para que los datos persistan entre sesiones.
+// Si no está disponible (por ejemplo dentro de una vista previa restringida),
+// cae a un objeto en memoria y la app sigue funcionando dentro de esa sesión.
+var STORAGE_PREFIX = "rutinaGeneral:";
+var memoryStore = {};
+var storageOk = (function(){
+  try{
+    var k = STORAGE_PREFIX + "__test__";
+    localStorage.setItem(k, "1");
+    localStorage.removeItem(k);
+    return true;
+  }catch(e){
+    return false;
+  }
+})();
+
+function storeGet(key, fallback){
+  if(storageOk){
+    var raw = localStorage.getItem(STORAGE_PREFIX + key);
+    if(raw === null) return fallback;
+    try{ return JSON.parse(raw); }catch(e){ return fallback; }
+  }
+  return (key in memoryStore) ? memoryStore[key] : fallback;
+}
+function storeSet(key, value){
+  if(storageOk){
+    localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(value));
+  }else{
+    memoryStore[key] = value;
+  }
+}
+
+// ---------- Datos base ----------
+
+var GROUP_LABEL = {
+  pecho: "Pecho",
+  esp_ancho: "Espalda · dorsal",
+  esp_grosor: "Espalda · remo",
+  hombro: "Hombros",
+  biceps: "Bíceps",
+  triceps: "Tríceps",
+  cuadriceps: "Cuádriceps",
+  posterior: "Isquios / glúteos",
+  core: "Core"
+};
+
+var ALTERNATIVES = {
+  pecho: ["Press banca con mancuernas","Press banca con barra","Press inclinado con mancuerna","Press en máquina","Aperturas en polea","Fondos en paralelas"],
+  esp_ancho: ["Jalón al pecho agarre ancho","Dominadas asistidas","Jalón agarre cerrado","Pull-over en polea"],
+  esp_grosor: ["Remo con barra","Remo en polea baja","Remo con mancuerna a un brazo","Remo en máquina"],
+  hombro: ["Elevaciones laterales con mancuernas","Press militar con mancuernas","Press Arnold","Elevaciones frontales"],
+  biceps: ["Curl con mancuernas","Curl con barra","Curl martillo","Curl en polea"],
+  triceps: ["Extensión en polea","Fondos en banco","Press francés","Press cerrado en polea"],
+  cuadriceps: ["Sentadilla goblet con mancuerna","Sentadilla búlgara con mancuernas","Prensa de piernas","Zancadas con mancuernas","Sentadilla con barra","Extensión de cuádriceps en máquina"],
+  posterior: ["Peso muerto rumano con mancuernas","Peso muerto rumano con barra","Hip thrust con barra","Curl femoral en máquina"],
+  core: ["Plancha frontal","Pallof press","Elevación de piernas colgado","Rueda abdominal","Plancha lateral"]
+};
+
+// Slots fijos del programa (día -> ejercicios). role "main" son los compuestos principales del día.
+var DAYS = [
+  {
+    id:"dia1", nombre:"Día 1", foco:"Full body A · cuádriceps + empuje",
+    slots:[
+      {id:"M1", role:"main", group:"cuadriceps", def:"Sentadilla goblet con mancuerna"},
+      {id:"M2", role:"main", group:"pecho", def:"Press banca con mancuernas"},
+      {id:"A1", role:"acc", group:"esp_ancho", def:"Jalón al pecho agarre ancho"},
+      {id:"A2", role:"acc", group:"hombro", def:"Elevaciones laterales con mancuernas"},
+      {id:"A3", role:"acc", group:"core", def:"Plancha frontal"}
+    ]
+  },
+  {
+    id:"dia2", nombre:"Día 2", foco:"Full body B · posterior + tracción",
+    slots:[
+      {id:"M3", role:"main", group:"posterior", def:"Peso muerto rumano con mancuernas"},
+      {id:"M4", role:"main", group:"esp_grosor", def:"Remo con barra"},
+      {id:"A4", role:"acc", group:"hombro", def:"Press militar con mancuernas"},
+      {id:"A5", role:"acc", group:"biceps", def:"Curl con mancuernas"},
+      {id:"A6", role:"acc", group:"core", def:"Pallof press"}
+    ]
+  },
+  {
+    id:"dia3", nombre:"Día 3", foco:"Full body C · cuádriceps + empuje superior",
+    slots:[
+      {id:"M5", role:"main", group:"cuadriceps", def:"Sentadilla búlgara con mancuernas"},
+      {id:"M6", role:"main", group:"pecho", def:"Press inclinado con mancuerna"},
+      {id:"A7", role:"acc", group:"esp_grosor", def:"Remo en polea baja"},
+      {id:"A8", role:"acc", group:"triceps", def:"Extensión en polea"},
+      {id:"A9", role:"acc", group:"core", def:"Elevación de piernas colgado"}
+    ]
+  }
+];
+
+var overrides = storeGet("overrides", {}); // "semana|slotId" -> nombre elegido (si difiere del default, para esa semana puntual)
+var loads = storeGet("loads", {}); // "semana|slotId" -> peso usado (texto)
+var checks = storeGet("checks", {}); // "semana|slotId" -> true/false, tildado en el checklist de sesión
+var customNames = storeGet("customNames", {}); // "nombre original" -> nombre personalizado (global, en todas las semanas)
+
+function displayName(name){
+  return customNames[name] || name;
+}
+
+function overrideKey(week, slotId){
+  return week + "|" + slotId;
+}
+
+function mainScheme(week){
+  if(week<=4) return {sets:3, reps:"12-15", rpe:"6-7", block:1};
+  if(week<=8) return {sets:4, reps:"10-12", rpe:"7-8", block:2};
+  return {sets:4, reps:"8-10", rpe:"8", block:3};
+}
+function accScheme(week){
+  if(week<=8) return {sets:3, reps:"12-15", rpe:"7"};
+  return {sets:3, reps:"10-12", rpe:"7-8"};
+}
+function weekNoteText(week){
+  var s = mainScheme(week);
+  var textos = {
+    1:"Bloque de adaptación. Foco en aprender bien la técnica de cada ejercicio y activar todos los grupos musculares, sin acercarte al fallo. En déficit, la primera prioridad es entrar en ritmo sin acumular fatiga innecesaria.",
+    2:"Sube la carga y baja un poco el margen de repeticiones en reserva. La técnica sigue siendo prioridad, sobre todo si notás menos energía por el déficit.",
+    3:"Bloque de consolidación: el objetivo ya no es subir mucho de peso, sino sostener la fuerza y la masa muscular mientras el déficit avanza. Si en alguna sesión te sentís muy cansado, está bien bajar una serie por ejercicio."
+  };
+  return textos[s.block];
+}
+
+function currentExercise(slot, week){
+  return overrides[overrideKey(week, slot.id)] || slot.def;
+}
+
+// ---------- Render Rutina ----------
+var selectedWeek = 1;
+
+function buildWeekButtons(){
+  var cont = document.getElementById("weekButtons");
+  cont.innerHTML = "";
+  for(var w=1; w<=12; w++){
+    var btn = document.createElement("button");
+    btn.textContent = w;
+    if(w===selectedWeek) btn.classList.add("active");
+    (function(week){
+      btn.addEventListener("click", function(){
+        selectedWeek = week;
+        renderRutina();
+      });
+    })(w);
+    cont.appendChild(btn);
+  }
+}
+
+function wireResetWeekButton(){
+  var btn = document.getElementById("resetWeekCheck");
+  if(btn.dataset.wired) return;
+  btn.dataset.wired = "1";
+  btn.addEventListener("click", function(){
+    DAYS.forEach(function(day){
+      day.slots.forEach(function(slot){
+        delete checks[overrideKey(selectedWeek, slot.id)];
+      });
+    });
+    storeSet("checks", checks);
+    renderRutina();
+  });
+}
+
+function renderRutina(){
+  buildWeekButtons();
+  wireResetWeekButton();
+  var s = mainScheme(selectedWeek);
+  var acc = accScheme(selectedWeek);
+  document.getElementById("weekHeading").textContent = "Semana " + selectedWeek + " · Bloque " + s.block;
+  document.getElementById("weekNote").textContent = weekNoteText(selectedWeek);
+
+  var cont = document.getElementById("daysContainer");
+  cont.innerHTML = "";
+  DAYS.forEach(function(day){
+    var card = document.createElement("div");
+    card.className = "day-card";
+    var head = document.createElement("div");
+    head.className = "day-head";
+    head.innerHTML = "<h3>"+day.nombre+"</h3><span class='foco'>"+day.foco+"</span>";
+    card.appendChild(head);
+
+    day.slots.forEach(function(slot){
+      var key = overrideKey(selectedWeek, slot.id);
+      var row = document.createElement("div");
+      row.className = "ex-row" + (slot.role==="main" ? " main":"") + (checks[key] ? " done" : "");
+      var scheme = slot.role==="main" ? s : acc;
+      var name = currentExercise(slot, selectedWeek);
+      var tag = (slot.role==="main" ? "Principal · " : "Accesorio · ") + GROUP_LABEL[slot.group];
+      var restSecs = slot.role==="main" ? 90 : 60;
+
+      row.innerHTML =
+        "<div><div class='ex-name'>"+displayName(name)+"</div><span class='ex-tag'>"+tag+"</span></div>"+
+        "<div class='ex-scheme'>"+scheme.sets+" x "+scheme.reps+"<small>RPE "+scheme.rpe+"</small></div>"+
+        "<div class='ex-extra'>"+
+          "<input type='text' inputmode='decimal' class='load-input' placeholder='kg' value='"+(loads[key]||"")+"'>"+
+          "<span class='load-unit'>kg</span>"+
+          "<button type='button' class='timer-btn' title='Descanso "+restSecs+"s'>"+
+            "<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='13' r='8'></circle><line x1='12' y1='9' x2='12' y2='13'></line><line x1='12' y1='13' x2='15' y2='13'></line><line x1='9' y1='2' x2='15' y2='2'></line></svg>"+
+          "</button>"+
+          "<input type='checkbox' class='done-check' title='Marcar como hecho' "+(checks[key] ? "checked" : "")+">"+
+        "</div>";
+
+      var loadInput = row.querySelector(".load-input");
+      loadInput.addEventListener("input", function(){
+        if(this.value.trim() === ""){
+          delete loads[key];
+        } else {
+          loads[key] = this.value.trim();
+        }
+        storeSet("loads", loads);
+      });
+
+      var timerBtn = row.querySelector(".timer-btn");
+      timerBtn.addEventListener("click", function(){
+        startRestTimer(restSecs, name);
+      });
+
+      var checkbox = row.querySelector(".done-check");
+      checkbox.addEventListener("change", function(){
+        if(this.checked){
+          checks[key] = true;
+        } else {
+          delete checks[key];
+        }
+        storeSet("checks", checks);
+        row.classList.toggle("done", this.checked);
+      });
+
+      card.appendChild(row);
+    });
+    cont.appendChild(card);
+  });
+}
+
+// ---------- Render Cambiar ejercicios ----------
+var selectedSwapWeek = 1;
+
+function buildSwapWeekButtons(){
+  var cont = document.getElementById("swapWeekButtons");
+  cont.innerHTML = "";
+  for(var w=1; w<=12; w++){
+    var btn = document.createElement("button");
+    btn.textContent = w;
+    if(w===selectedSwapWeek) btn.classList.add("active");
+    (function(week){
+      btn.addEventListener("click", function(){
+        selectedSwapWeek = week;
+        renderSwap();
+      });
+    })(w);
+    cont.appendChild(btn);
+  }
+}
+
+function renderSwap(){
+  buildSwapWeekButtons();
+  var s = mainScheme(selectedSwapWeek);
+  document.getElementById("swapWeekHeading").textContent = "Editando semana " + selectedSwapWeek + " · Bloque " + s.block;
+
+  var cont = document.getElementById("swapContainer");
+  cont.innerHTML = "";
+  DAYS.forEach(function(day){
+    var title = document.createElement("div");
+    title.className = "swap-day-title";
+    title.textContent = day.nombre + " — " + day.foco;
+    cont.appendChild(title);
+
+    day.slots.forEach(function(slot){
+      var row = document.createElement("div");
+      row.className = "swap-row";
+      var key = overrideKey(selectedSwapWeek, slot.id);
+
+      var left = document.createElement("div");
+      left.className = "swap-left";
+      var groupLbl = document.createElement("div");
+      groupLbl.className = "swap-group";
+      groupLbl.textContent = (slot.role==="main" ? "Principal · " : "Accesorio · ") + GROUP_LABEL[slot.group];
+      var curLbl = document.createElement("div");
+      var isChanged = !!overrides[key];
+      curLbl.className = "swap-current" + (isChanged ? " changed" : "");
+      curLbl.textContent = displayName(currentExercise(slot, selectedSwapWeek));
+      left.appendChild(groupLbl);
+      left.appendChild(curLbl);
+
+      var controls = document.createElement("div");
+      controls.className = "swap-controls";
+
+      var select = document.createElement("select");
+      var options = ALTERNATIVES[slot.group];
+      options.forEach(function(opt){
+        var o = document.createElement("option");
+        o.value = opt;
+        o.textContent = displayName(opt);
+        if(opt === currentExercise(slot, selectedSwapWeek)) o.selected = true;
+        select.appendChild(o);
+      });
+      select.addEventListener("change", function(){
+        if(select.value === slot.def){
+          delete overrides[key];
+        } else {
+          overrides[key] = select.value;
+        }
+        storeSet("overrides", overrides);
+        renderSwap();
+        renderRutina();
+      });
+      controls.appendChild(select);
+
+      if(isChanged){
+        var resetBtn = document.createElement("button");
+        resetBtn.className = "reset-btn";
+        resetBtn.textContent = "Restablecer";
+        resetBtn.addEventListener("click", function(){
+          delete overrides[key];
+          storeSet("overrides", overrides);
+          renderSwap();
+          renderRutina();
+        });
+        controls.appendChild(resetBtn);
+      }
+
+      row.appendChild(left);
+      row.appendChild(controls);
+      cont.appendChild(row);
+    });
+  });
+}
+
+// ---------- Datos de la solapa "Cómo hacerlo" ----------
+var EXERCISE_GUIDE = {
+  "Press banca con mancuernas": {
+    setup:"Acostado en un banco plano, una mancuerna en cada mano apoyada sobre los muslos, y las llevás a la altura del pecho con los codos flexionados. Pies firmes en el piso, zona lumbar con su curva natural, escápulas retraídas contra el banco.",
+    ejecucion:"Bajá las mancuernas de forma controlada hasta que queden a la altura del pecho, con los codos a unos 45-60° del torso, y empujá hacia arriba hasta extender los brazos sin trabar los codos con violencia.",
+    errores:"Arquear demasiado la zona lumbar, dejar que los codos se abran a 90° (sobrecarga el hombro) o rebotar las mancuernas en la parte baja del recorrido."
+  },
+  "Press banca con barra": {
+    setup:"Acostado en el banco, agarre un poco más ancho que los hombros, barra alineada sobre los ojos u hombros antes de sacarla del soporte. Escápulas retraídas, pies firmes en el piso.",
+    ejecucion:"Bajá la barra de forma controlada hasta tocar levemente el pecho (a la altura del esternón bajo), manteniendo los codos en un ángulo moderado, y empujá hacia arriba hasta extender los brazos.",
+    errores:"Rebotar la barra en el pecho, levantar la cadera del banco para ayudarse, o bajar la barra demasiado alto (cerca del cuello)."
+  },
+  "Press inclinado con mancuerna": {
+    setup:"Banco inclinado entre 30-45°, una mancuerna en cada mano a la altura del pecho superior, codos ligeramente por debajo del nivel de los hombros.",
+    ejecucion:"Empujá las mancuernas hacia arriba y ligeramente hacia adentro hasta casi juntarlas arriba, después bajá controlado hasta sentir el estiramiento en el pecho superior.",
+    errores:"Inclinar el banco a más de 45° (pasa a trabajar más hombro que pecho) o dejar que las mancuernas caigan sin control en la bajada."
+  },
+  "Press en máquina": {
+    setup:"Sentado con la espalda apoyada en el respaldo, agarres a la altura del pecho, ajustá el asiento para que los agarres queden alineados con la mitad del pecho.",
+    ejecucion:"Empujá hacia adelante extendiendo los brazos sin trabar los codos con fuerza, y volvé controlando el regreso hasta sentir el estiramiento en el pecho.",
+    errores:"Despegar la espalda del respaldo para empujar más peso, o usar un rango de movimiento muy corto."
+  },
+  "Aperturas en polea": {
+    setup:"De pie en el centro de la máquina de poleas, un cable en cada mano a la altura del pecho, un pie adelantado para estabilidad, torso ligeramente inclinado hacia adelante.",
+    ejecucion:"Con los codos apenas flexionados, llevá las manos hacia adelante y adentro en un arco, como abrazando un tronco, y volvé controlando el estiramiento en el pecho.",
+    errores:"Flexionar mucho los codos (se convierte en un press) o usar impulso del torso en vez de aislar el pecho."
+  },
+  "Fondos en paralelas": {
+    setup:"Sujetate de las paralelas con los brazos extendidos, cuerpo ligeramente inclinado hacia adelante para priorizar pecho, piernas flexionadas y cruzadas.",
+    ejecucion:"Bajá el cuerpo flexionando los codos hasta sentir un buen estiramiento en el pecho/hombro, sin pasar de un ángulo cómodo, y empujá hacia arriba hasta extender los brazos.",
+    errores:"Bajar demasiado si te molesta el hombro, o dejar que los codos se abran mucho hacia los costados."
+  },
+  "Jalón al pecho agarre ancho": {
+    setup:"Sentado con los muslos fijados bajo el soporte, agarre en la barra más ancho que los hombros, brazos extendidos hacia arriba.",
+    ejecucion:"Tirá de la barra hacia la parte superior del pecho llevando los codos hacia abajo y atrás, apretando la espalda, y volvé controlando la subida hasta extender los brazos.",
+    errores:"Tirar con impulso del torso hacia atrás, o bajar la barra detrás de la nuca (innecesario y riesgoso para el hombro)."
+  },
+  "Dominadas asistidas": {
+    setup:"Rodillas o pies apoyados en la plataforma o banda de asistencia, agarre en la barra un poco más ancho que los hombros, brazos extendidos.",
+    ejecucion:"Tirá del cuerpo hacia arriba hasta que el mentón supere la barra, llevando los codos hacia abajo y atrás, y bajá controlado hasta extender los brazos.",
+    errores:"Usar demasiada asistencia (no da estímulo real) o hacer medio recorrido en vez de la dominada completa."
+  },
+  "Jalón agarre cerrado": {
+    setup:"Sentado con los muslos fijados, agarre cerrado (manos casi juntas) en una barra en V o agarre neutro, brazos extendidos hacia arriba.",
+    ejecucion:"Tirá hacia el pecho llevando los codos pegados al cuerpo, apretando bien la espalda arriba del movimiento, y volvé controlando la subida.",
+    errores:"Inclinarse mucho hacia atrás para ayudarse con el peso del cuerpo, en vez de que trabaje la espalda."
+  },
+  "Pull-over en polea": {
+    setup:"De pie frente a la polea alta con una barra o cuerda, brazos extendidos por encima de la cabeza, torso levemente inclinado hacia adelante.",
+    ejecucion:"Con los codos casi extendidos y fijos, llevá los brazos en arco hacia abajo hasta la altura de los muslos, apretando el dorsal, y volvé controlado.",
+    errores:"Flexionar y extender mucho el codo (pasa a trabajar tríceps en vez de espalda) o usar impulso de todo el cuerpo."
+  },
+  "Remo con barra": {
+    setup:"De pie, torso inclinado hacia adelante unos 45° con la espalda recta, barra sostenida con los brazos extendidos, rodillas ligeramente flexionadas.",
+    ejecucion:"Tirá la barra hacia el abdomen bajo llevando los codos hacia atrás y apretando los omóplatos, y bajá controlado hasta extender los brazos.",
+    errores:"Redondear la espalda baja, usar rebote de la cadera para generar impulso, o parar el torso demasiado vertical (pasa a ser otro ejercicio)."
+  },
+  "Remo en polea baja": {
+    setup:"Sentado con los pies apoyados en la plataforma, rodillas ligeramente flexionadas, agarre en el mango con brazos extendidos, torso recto.",
+    ejecucion:"Tirá el mango hacia el abdomen manteniendo el torso estable, llevando los codos hacia atrás y apretando la espalda, y volvé controlando la vuelta.",
+    errores:"Balancear el torso hacia adelante y atrás para ayudarse (rebote), o encorvar la espalda al final del recorrido."
+  },
+  "Remo con mancuerna a un brazo": {
+    setup:"Una rodilla y una mano apoyadas en un banco, espalda paralela al piso y recta, la otra mano sostiene la mancuerna con el brazo extendido.",
+    ejecucion:"Tirá la mancuerna hacia la cadera llevando el codo hacia atrás y apretando la espalda, y bajá controlado hasta extender el brazo.",
+    errores:"Rotar el torso para ayudarse con impulso, o dejar que la espalda se redondee."
+  },
+  "Remo en máquina": {
+    setup:"Sentado con el pecho apoyado en el respaldo (si la máquina lo tiene) o torso estable, agarres a la altura del pecho, brazos extendidos.",
+    ejecucion:"Tirá los agarres hacia atrás llevando los codos hacia atrás y apretando los omóplatos, y volvé controlando el regreso.",
+    errores:"Despegar el pecho del respaldo para tirar más peso, o hacer el movimiento muy rápido sin control."
+  },
+  "Elevaciones laterales con mancuernas": {
+    setup:"De pie, una mancuerna en cada mano a los costados del cuerpo, codos con una leve flexión fija durante todo el movimiento.",
+    ejecucion:"Elevá los brazos hacia los costados hasta la altura de los hombros (no más arriba), liderando levemente con los codos, y bajá controlado.",
+    errores:"Usar impulso balanceando el torso, o subir las mancuernas por encima de la altura del hombro (mete al trapecio en vez del hombro)."
+  },
+  "Press militar con mancuernas": {
+    setup:"De pie o sentado, una mancuerna en cada mano a la altura de los hombros, codos apuntando ligeramente hacia adelante, core firme.",
+    ejecucion:"Empujá las mancuernas hacia arriba hasta casi extender los brazos por encima de la cabeza, y bajá controlado hasta la altura de los hombros.",
+    errores:"Arquear excesivamente la zona lumbar para compensar, o no controlar la bajada."
+  },
+  "Press Arnold": {
+    setup:"Sentado o de pie, mancuernas frente a los hombros con las palmas mirando hacia vos, codos flexionados y pegados al cuerpo.",
+    ejecucion:"A medida que empujás hacia arriba, rotá las muñecas hasta que las palmas queden mirando hacia adelante arriba del todo, y revertí la rotación al bajar.",
+    errores:"Hacer la rotación demasiado rápido sin controlar el peso, o perder la postura del torso durante el press."
+  },
+  "Elevaciones frontales": {
+    setup:"De pie, una mancuerna en cada mano frente a los muslos, brazos con leve flexión fija en los codos.",
+    ejecucion:"Elevá una mancuerna (o ambas) hacia adelante hasta la altura del hombro, y bajá controlado antes de repetir del otro lado si es alternado.",
+    errores:"Balancear el torso hacia atrás para generar impulso, o subir por encima de la altura del hombro."
+  },
+  "Curl con mancuernas": {
+    setup:"De pie o sentado, una mancuerna en cada mano con los brazos extendidos a los costados, palmas mirando hacia adelante.",
+    ejecucion:"Flexioná los codos llevando las mancuernas hacia los hombros sin mover el brazo superior, y bajá controlado hasta extender los brazos.",
+    errores:"Balancear el torso o los hombros para ayudarse con el impulso, o no bajar completamente entre repeticiones."
+  },
+  "Curl con barra": {
+    setup:"De pie, agarre en la barra un poco más ancho que las caderas, brazos extendidos, codos pegados al cuerpo.",
+    ejecucion:"Flexioná los codos llevando la barra hacia el pecho sin mover el torso, y bajá controlado hasta extender los brazos.",
+    errores:"Usar la espalda (balanceo) para levantar más peso del que podés controlar solo con el bíceps."
+  },
+  "Curl martillo": {
+    setup:"De pie, una mancuerna en cada mano con agarre neutro (palmas mirándose entre sí), brazos extendidos a los costados.",
+    ejecucion:"Flexioná los codos manteniendo el agarre neutro durante todo el recorrido, y bajá controlado hasta extender los brazos.",
+    errores:"Rotar la muñeca durante el movimiento (deja de ser agarre neutro) o balancear el cuerpo."
+  },
+  "Curl en polea": {
+    setup:"De pie frente a la polea baja, agarre en la barra o cuerda con brazos extendidos, codos pegados al cuerpo.",
+    ejecucion:"Flexioná los codos llevando el agarre hacia los hombros manteniendo el brazo superior fijo, y volvé controlado.",
+    errores:"Alejarse o acercarse mucho de la polea rompiendo la tensión constante, o usar impulso del torso."
+  },
+  "Extensión en polea": {
+    setup:"De pie frente a la polea alta, agarre en la barra o cuerda, codos pegados al cuerpo y flexionados a 90° aproximadamente.",
+    ejecucion:"Extendé los codos empujando hacia abajo sin mover el brazo superior, y volvé controlado hasta la posición inicial.",
+    errores:"Separar los codos del cuerpo durante el movimiento, o usar el peso del torso para empujar."
+  },
+  "Fondos en banco": {
+    setup:"Manos apoyadas en el borde de un banco detrás tuyo, piernas extendidas o flexionadas adelante, cuerpo cerca del banco.",
+    ejecucion:"Bajá el cuerpo flexionando los codos hasta un ángulo cómodo (no forzar más de 90°), y empujá hacia arriba extendiendo los brazos.",
+    errores:"Bajar demasiado si sentís molestia en el hombro, o alejar mucho las manos del cuerpo."
+  },
+  "Press francés": {
+    setup:"Acostado en un banco o sentado, mancuerna o barra Z sostenida con brazos extendidos por encima de la cabeza, codos apuntando al techo.",
+    ejecucion:"Flexioná los codos bajando el peso hacia atrás de la cabeza sin mover el brazo superior, y extendé de nuevo hasta arriba.",
+    errores:"Dejar que los codos se abran hacia los costados, o bajar el peso demasiado rápido sin control."
+  },
+  "Press cerrado en polea": {
+    setup:"De pie frente a la polea alta, agarre cerrado en una cuerda o barra recta, codos pegados al cuerpo.",
+    ejecucion:"Empujá hacia abajo extendiendo los codos completamente sin separarlos del torso, y volvé controlado.",
+    errores:"Usar los hombros para empujar en vez del tríceps, o mover el torso para generar impulso."
+  },
+  "Sentadilla goblet con mancuerna": {
+    setup:"De pie, sostené una mancuerna con ambas manos contra el pecho, pies un poco más anchos que los hombros, puntas ligeramente hacia afuera.",
+    ejecucion:"Bajá flexionando cadera y rodillas manteniendo el pecho arriba y los talones en el piso, hasta que los muslos queden paralelos al piso o más abajo, y subí empujando con los talones.",
+    errores:"Dejar que las rodillas se vayan hacia adentro, levantar los talones del piso, o redondear la espalda baja."
+  },
+  "Sentadilla búlgara con mancuernas": {
+    setup:"De pie de espaldas a un banco bajo, apoyá el empeine de un pie sobre el banco, el otro pie adelante en el piso, una mancuerna en cada mano.",
+    ejecucion:"Bajá flexionando la rodilla de la pierna adelantada hasta un ángulo cómodo, manteniendo el torso mayormente vertical, y subí empujando con esa pierna.",
+    errores:"Adelantar demasiado la rodilla dejando el talón despegado, o dejar que la rodilla se vaya hacia adentro."
+  },
+  "Prensa de piernas": {
+    setup:"Sentado en la máquina con la espalda apoyada, pies a la altura de los hombros sobre la plataforma, rodillas alineadas con los pies.",
+    ejecucion:"Bajá la plataforma flexionando las rodillas hasta un ángulo cómodo sin que la zona lumbar se despegue del asiento, y empujá hasta extender las piernas sin trabar las rodillas.",
+    errores:"Bajar tanto que la zona lumbar se despegue del respaldo, o trabar las rodillas con fuerza arriba del todo."
+  },
+  "Zancadas con mancuernas": {
+    setup:"De pie, una mancuerna en cada mano a los costados, torso erguido.",
+    ejecucion:"Dá un paso adelante y bajá flexionando ambas rodillas hasta que la de atrás casi toque el piso, y empujá con el pie adelantado para volver a la posición inicial.",
+    errores:"Dar un paso demasiado corto (sobrecarga la rodilla) o dejar que la rodilla adelantada se vaya hacia adentro."
+  },
+  "Sentadilla con barra": {
+    setup:"Barra apoyada sobre la parte alta de la espalda (trapecio), pies un poco más anchos que los hombros, puntas ligeramente hacia afuera.",
+    ejecucion:"Bajá flexionando cadera y rodillas manteniendo el pecho arriba y el peso repartido en todo el pie, hasta que los muslos queden paralelos al piso o más abajo, y subí empujando con los talones.",
+    errores:"Dejar que las rodillas colapsen hacia adentro, redondear la espalda baja, o subir el talón del piso."
+  },
+  "Extensión de cuádriceps en máquina": {
+    setup:"Sentado en la máquina con la espalda apoyada, el respaldo de los tobillos apoyado justo arriba del pie, rodillas alineadas con el eje de la máquina.",
+    ejecucion:"Extendé las rodillas levantando el peso hasta casi trabar (sin golpear), y bajá controlado hasta la posición inicial.",
+    errores:"Usar impulso del torso para levantar más peso, o bajar el peso de golpe sin control."
+  },
+  "Peso muerto rumano con mancuernas": {
+    setup:"De pie, una mancuerna en cada mano frente a los muslos, rodillas con una leve flexión fija, espalda recta.",
+    ejecucion:"Empujá la cadera hacia atrás bajando las mancuernas pegadas a las piernas hasta sentir el estiramiento en los isquios, y volvé empujando la cadera hacia adelante.",
+    errores:"Redondear la espalda baja, flexionar demasiado las rodillas (se convierte en sentadilla), o alejar las mancuernas del cuerpo."
+  },
+  "Peso muerto rumano con barra": {
+    setup:"De pie, agarre en la barra un poco más ancho que las caderas, rodillas con leve flexión fija, espalda recta.",
+    ejecucion:"Empujá la cadera hacia atrás bajando la barra pegada a las piernas hasta sentir el estiramiento en los isquios, y volvé empujando la cadera hacia adelante.",
+    errores:"Redondear la espalda baja, o dejar que la barra se aleje del cuerpo en la bajada."
+  },
+  "Hip thrust con barra": {
+    setup:"Espalda alta apoyada en un banco, barra apoyada sobre la cadera (con protección), pies apoyados en el piso a la altura de las rodillas, rodillas a 90°.",
+    ejecucion:"Empujá la cadera hacia arriba apretando bien los glúteos hasta que el torso quede paralelo al piso, y bajá controlado sin tocar el piso del todo.",
+    errores:"Hiperextender la zona lumbar arriba del todo en vez de terminar el movimiento con los glúteos, o empujar con los talones muy adelantados."
+  },
+  "Curl femoral en máquina": {
+    setup:"Acostado boca abajo o sentado según la máquina, el respaldo de los tobillos apoyado justo arriba del talón.",
+    ejecucion:"Flexioná las rodillas llevando el peso hacia los glúteos, apretando los isquios, y bajá controlado hasta la posición inicial.",
+    errores:"Levantar la cadera de la máquina para ayudarse, o hacer el movimiento con impulso rápido."
+  },
+  "Plancha frontal": {
+    setup:"Apoyo en antebrazos y puntas de los pies, codos alineados debajo de los hombros, cuerpo formando una línea recta desde la cabeza hasta los talones.",
+    ejecucion:"Mantené la posición apretando abdomen y glúteos, respirando de forma constante, sin dejar que la cadera suba o baje.",
+    errores:"Dejar que la cadera caiga (hiperextiende la lumbar) o levantarla demasiado (pierde tensión abdominal)."
+  },
+  "Pallof press": {
+    setup:"De pie de costado a la polea o banda, a la altura del pecho, agarre con ambas manos frente al esternón, core firme.",
+    ejecucion:"Extendé los brazos hacia adelante resistiendo la rotación que genera la polea, y volvé controlado sin dejar que el torso gire.",
+    errores:"Dejar que el torso rote hacia la polea, o hacer el movimiento demasiado rápido perdiendo el control del core."
+  },
+  "Elevación de piernas colgado": {
+    setup:"Colgado de una barra con agarre firme, brazos extendidos, cuerpo estable sin balancearse.",
+    ejecucion:"Elevá las piernas (rectas o con rodillas flexionadas según tu nivel) hasta la altura de la cadera o más arriba, controlando el abdomen, y bajá controlado.",
+    errores:"Usar impulso balanceando todo el cuerpo, o bajar las piernas de golpe sin control."
+  },
+  "Rueda abdominal": {
+    setup:"De rodillas en el piso, ambas manos sobre la rueda frente a vos, core firme antes de empezar a rodar.",
+    ejecucion:"Rodá hacia adelante extendiendo el cuerpo lo más lejos que puedas controlar sin que la cadera caiga, y volvé apretando el abdomen para regresar.",
+    errores:"Dejar que la zona lumbar se hunda (hiperextensión), o ir más lejos de lo que podés controlar y volver."
+  },
+  "Plancha lateral": {
+    setup:"Apoyo en un antebrazo alineado debajo del hombro, cuerpo de costado formando una línea recta, pies apoyados uno sobre el otro o uno adelante del otro.",
+    ejecucion:"Elevá la cadera del piso manteniendo el cuerpo alineado, apretando el core, y sostené la posición respirando de forma constante.",
+    errores:"Dejar que la cadera caiga hacia el piso, o rotar el torso hacia adelante o atrás."
+  }
+};
+
+// Lista completa de ejercicios (nombre + grupo) para el buscador, sin duplicados.
+var ALL_EXERCISES = (function(){
+  var list = [];
+  var seen = {};
+  Object.keys(GROUP_LABEL).forEach(function(group){
+    ALTERNATIVES[group].forEach(function(name){
+      if(seen[name]) return;
+      seen[name] = true;
+      list.push({name:name, group:group});
+    });
+  });
+  return list;
+})();
+
+var selectedGuideExercise = ALL_EXERCISES[0].name;
+var selectedGuideGroup = null; // null = todos los grupos
+
+function normalize(str){
+  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+}
+
+// ---------- Diagramas esquemáticos por ejercicio ----------
+// Un set reducido de "poses" base (vista lateral, muy simplificada) que se
+// reutiliza entre ejercicios con biomecánica parecida.
+var POSE_SVG = {
+  bench_press_barbell:
+    "<rect x='14' y='68' width='64' height='7' rx='3' class='pose-furniture'/>"+
+    "<rect x='20' y='75' width='6' height='13' rx='1' class='pose-furniture'/>"+
+    "<rect x='66' y='75' width='6' height='13' rx='1' class='pose-furniture'/>"+
+    "<circle cx='18' cy='58' r='8' class='pose-head'/>"+
+    "<line x1='26' y1='60' x2='72' y2='60' class='pose-body'/>"+
+    "<line x1='72' y1='60' x2='85' y2='70' class='pose-body'/>"+
+    "<line x1='85' y1='70' x2='78' y2='92' class='pose-body'/>"+
+    "<line x1='44' y1='60' x2='36' y2='32' class='pose-body'/>"+
+    "<line x1='56' y1='60' x2='64' y2='32' class='pose-body'/>"+
+    "<line x1='30' y1='32' x2='70' y2='32' class='pose-eq'/>"+
+    "<circle cx='28' cy='32' r='7' class='pose-eq-fill'/>"+
+    "<circle cx='72' cy='32' r='7' class='pose-eq-fill'/>",
+
+  bench_press_db:
+    "<rect x='14' y='68' width='64' height='7' rx='3' class='pose-furniture'/>"+
+    "<rect x='20' y='75' width='6' height='13' rx='1' class='pose-furniture'/>"+
+    "<rect x='66' y='75' width='6' height='13' rx='1' class='pose-furniture'/>"+
+    "<circle cx='18' cy='58' r='8' class='pose-head'/>"+
+    "<line x1='26' y1='60' x2='72' y2='60' class='pose-body'/>"+
+    "<line x1='72' y1='60' x2='85' y2='70' class='pose-body'/>"+
+    "<line x1='85' y1='70' x2='78' y2='92' class='pose-body'/>"+
+    "<line x1='44' y1='60' x2='36' y2='32' class='pose-body'/>"+
+    "<line x1='56' y1='60' x2='64' y2='32' class='pose-body'/>"+
+    "<line x1='28' y1='32' x2='42' y2='32' class='pose-eq'/>"+
+    "<circle cx='27' cy='32' r='5' class='pose-eq-fill'/>"+
+    "<circle cx='43' cy='32' r='5' class='pose-eq-fill'/>"+
+    "<line x1='58' y1='32' x2='72' y2='32' class='pose-eq'/>"+
+    "<circle cx='57' cy='32' r='5' class='pose-eq-fill'/>"+
+    "<circle cx='73' cy='32' r='5' class='pose-eq-fill'/>",
+
+  skullcrusher:
+    "<rect x='14' y='68' width='64' height='7' rx='3' class='pose-furniture'/>"+
+    "<rect x='20' y='75' width='6' height='13' rx='1' class='pose-furniture'/>"+
+    "<rect x='66' y='75' width='6' height='13' rx='1' class='pose-furniture'/>"+
+    "<circle cx='18' cy='58' r='8' class='pose-head'/>"+
+    "<line x1='26' y1='60' x2='72' y2='60' class='pose-body'/>"+
+    "<line x1='72' y1='60' x2='85' y2='70' class='pose-body'/>"+
+    "<line x1='85' y1='70' x2='78' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='60' x2='50' y2='34' class='pose-body'/>"+
+    "<line x1='50' y1='34' x2='30' y2='46' class='pose-body'/>"+
+    "<line x1='20' y1='46' x2='34' y2='46' class='pose-eq'/>"+
+    "<circle cx='18' cy='46' r='6' class='pose-eq-fill'/>",
+
+  seated_machine:
+    "<rect x='30' y='72' width='38' height='7' rx='3' class='pose-furniture'/>"+
+    "<rect x='45' y='79' width='8' height='11' rx='1' class='pose-furniture'/>"+
+    "<circle cx='50' cy='26' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='34' x2='50' y2='72' class='pose-body'/>"+
+    "<line x1='50' y1='72' x2='30' y2='76' class='pose-body'/>"+
+    "<line x1='50' y1='42' x2='68' y2='44' class='pose-body'/>"+
+    "<line x1='68' y1='44' x2='84' y2='46' class='pose-body'/>"+
+    "<rect x='86' y='6' width='6' height='46' rx='2' class='pose-furniture'/>"+
+    "<circle cx='89' cy='10' r='6' class='pose-eq-thin'/>"+
+    "<circle cx='89' cy='10' r='2' class='pose-eq-fill'/>"+
+    "<line x1='89' y1='16' x2='85' y2='45' class='pose-eq-thin'/>"+
+    "<circle cx='84' cy='46' r='4' class='pose-eq-fill'/>",
+
+  leg_press:
+    "<rect x='6' y='70' width='30' height='7' rx='3' class='pose-furniture'/>"+
+    "<rect x='6' y='38' width='7' height='32' rx='3' class='pose-furniture'/>"+
+    "<circle cx='13' cy='34' r='8' class='pose-head'/>"+
+    "<line x1='18' y1='42' x2='42' y2='58' class='pose-body'/>"+
+    "<line x1='42' y1='58' x2='58' y2='48' class='pose-body'/>"+
+    "<line x1='58' y1='48' x2='80' y2='58' class='pose-body'/>"+
+    "<line x1='28' y1='46' x2='20' y2='60' class='pose-body'/>"+
+    "<rect x='80' y='44' width='6' height='28' rx='2' class='pose-eq'/>",
+
+  leg_machine:
+    "<rect x='28' y='60' width='32' height='7' rx='3' class='pose-furniture'/>"+
+    "<rect x='28' y='30' width='7' height='30' rx='3' class='pose-furniture'/>"+
+    "<circle cx='33' cy='24' r='8' class='pose-head'/>"+
+    "<line x1='37' y1='31' x2='40' y2='60' class='pose-body'/>"+
+    "<line x1='40' y1='60' x2='68' y2='60' class='pose-body'/>"+
+    "<line x1='68' y1='60' x2='82' y2='40' class='pose-body'/>"+
+    "<line x1='37' y1='36' x2='28' y2='50' class='pose-body'/>"+
+    "<rect x='80' y='34' width='6' height='14' rx='2' class='pose-eq'/>",
+
+  standing_dumbbell_curl:
+    "<circle cx='50' cy='16' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='24' x2='50' y2='58' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='42' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='58' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='30' x2='36' y2='46' class='pose-body'/>"+
+    "<line x1='36' y1='46' x2='32' y2='64' class='pose-body'/>"+
+    "<line x1='50' y1='30' x2='64' y2='46' class='pose-body'/>"+
+    "<line x1='64' y1='46' x2='68' y2='64' class='pose-body'/>"+
+    "<line x1='26' y1='64' x2='38' y2='64' class='pose-eq'/>"+
+    "<circle cx='25' cy='64' r='4.5' class='pose-eq-fill'/>"+
+    "<circle cx='39' cy='64' r='4.5' class='pose-eq-fill'/>"+
+    "<line x1='62' y1='64' x2='74' y2='64' class='pose-eq'/>"+
+    "<circle cx='61' cy='64' r='4.5' class='pose-eq-fill'/>"+
+    "<circle cx='75' cy='64' r='4.5' class='pose-eq-fill'/>"+
+    "<line x1='12' y1='95' x2='88' y2='95' class='pose-floor'/>",
+
+  standing_barbell_curl:
+    "<circle cx='50' cy='16' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='24' x2='50' y2='58' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='42' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='58' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='30' x2='38' y2='46' class='pose-body'/>"+
+    "<line x1='38' y1='46' x2='34' y2='62' class='pose-body'/>"+
+    "<line x1='50' y1='30' x2='62' y2='46' class='pose-body'/>"+
+    "<line x1='62' y1='46' x2='66' y2='62' class='pose-body'/>"+
+    "<line x1='30' y1='62' x2='70' y2='62' class='pose-eq'/>"+
+    "<circle cx='28' cy='62' r='6' class='pose-eq-fill'/>"+
+    "<circle cx='72' cy='62' r='6' class='pose-eq-fill'/>"+
+    "<line x1='12' y1='95' x2='88' y2='95' class='pose-floor'/>",
+
+  standing_raise_db:
+    "<circle cx='50' cy='16' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='24' x2='50' y2='58' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='42' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='58' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='30' x2='78' y2='26' class='pose-body'/>"+
+    "<line x1='70' y1='26' x2='84' y2='26' class='pose-eq'/>"+
+    "<circle cx='68' cy='26' r='5' class='pose-eq-fill'/>"+
+    "<circle cx='86' cy='26' r='5' class='pose-eq-fill'/>"+
+    "<line x1='12' y1='95' x2='88' y2='95' class='pose-floor'/>",
+
+  standing_row:
+    "<circle cx='30' cy='22' r='8' class='pose-head'/>"+
+    "<line x1='30' y1='30' x2='64' y2='56' class='pose-body'/>"+
+    "<line x1='64' y1='56' x2='56' y2='92' class='pose-body'/>"+
+    "<line x1='64' y1='56' x2='73' y2='92' class='pose-body'/>"+
+    "<line x1='44' y1='34' x2='40' y2='50' class='pose-body'/>"+
+    "<line x1='40' y1='50' x2='37' y2='68' class='pose-body'/>"+
+    "<line x1='20' y1='68' x2='54' y2='68' class='pose-eq'/>"+
+    "<circle cx='18' cy='68' r='7' class='pose-eq-fill'/>"+
+    "<circle cx='56' cy='68' r='7' class='pose-eq-fill'/>"+
+    "<line x1='10' y1='95' x2='90' y2='95' class='pose-floor'/>",
+
+  standing_row_db:
+    "<circle cx='30' cy='22' r='8' class='pose-head'/>"+
+    "<line x1='30' y1='30' x2='64' y2='56' class='pose-body'/>"+
+    "<line x1='64' y1='56' x2='56' y2='92' class='pose-body'/>"+
+    "<line x1='64' y1='56' x2='73' y2='92' class='pose-body'/>"+
+    "<line x1='44' y1='34' x2='40' y2='50' class='pose-body'/>"+
+    "<line x1='40' y1='50' x2='37' y2='68' class='pose-body'/>"+
+    "<rect x='12' y='54' width='20' height='6' rx='2' class='pose-furniture'/>"+
+    "<line x1='30' y1='30' x2='22' y2='54' class='pose-body'/>"+
+    "<line x1='31' y1='68' x2='43' y2='68' class='pose-eq'/>"+
+    "<circle cx='29' cy='68' r='5' class='pose-eq-fill'/>"+
+    "<circle cx='45' cy='68' r='5' class='pose-eq-fill'/>"+
+    "<line x1='10' y1='95' x2='90' y2='95' class='pose-floor'/>",
+
+  standing_cable_curl:
+    "<circle cx='50' cy='16' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='24' x2='50' y2='58' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='42' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='58' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='30' x2='64' y2='44' class='pose-body'/>"+
+    "<line x1='64' y1='44' x2='58' y2='58' class='pose-body'/>"+
+    "<line x1='58' y1='58' x2='70' y2='90' class='pose-eq-thin'/>"+
+    "<rect x='68' y='90' width='10' height='6' rx='2' class='pose-furniture'/>"+
+    "<circle cx='73' cy='86' r='4' class='pose-eq-thin'/>"+
+    "<line x1='12' y1='95' x2='88' y2='95' class='pose-floor'/>",
+
+  standing_cable_pushdown:
+    "<rect x='78' y='4' width='6' height='6' rx='2' class='pose-furniture'/>"+
+    "<line x1='81' y1='10' x2='66' y2='58' class='pose-eq-thin'/>"+
+    "<circle cx='50' cy='16' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='24' x2='50' y2='58' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='42' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='58' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='30' x2='58' y2='46' class='pose-body'/>"+
+    "<line x1='58' y1='46' x2='66' y2='60' class='pose-body'/>"+
+    "<circle cx='68' cy='60' r='4' class='pose-eq-fill'/>"+
+    "<line x1='12' y1='95' x2='88' y2='95' class='pose-floor'/>",
+
+  standing_cable_fly:
+    "<circle cx='50' cy='16' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='24' x2='50' y2='60' class='pose-body'/>"+
+    "<line x1='50' y1='60' x2='40' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='60' x2='60' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='34' x2='26' y2='42' class='pose-body'/>"+
+    "<line x1='50' y1='34' x2='74' y2='42' class='pose-body'/>"+
+    "<rect x='10' y='20' width='6' height='60' rx='2' class='pose-furniture'/>"+
+    "<rect x='84' y='20' width='6' height='60' rx='2' class='pose-furniture'/>"+
+    "<line x1='16' y1='40' x2='26' y2='42' class='pose-eq-thin'/>"+
+    "<line x1='84' y1='40' x2='74' y2='42' class='pose-eq-thin'/>"+
+    "<circle cx='26' cy='42' r='4' class='pose-eq-fill'/>"+
+    "<circle cx='74' cy='42' r='4' class='pose-eq-fill'/>"+
+    "<line x1='8' y1='95' x2='92' y2='95' class='pose-floor'/>",
+
+  standing_cable_pullover:
+    "<rect x='40' y='4' width='6' height='6' rx='2' class='pose-furniture'/>"+
+    "<circle cx='43' cy='10' r='4' class='pose-eq-thin'/>"+
+    "<circle cx='50' cy='20' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='28' x2='50' y2='60' class='pose-body'/>"+
+    "<line x1='50' y1='60' x2='42' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='60' x2='58' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='32' x2='60' y2='55' class='pose-body'/>"+
+    "<line x1='43' y1='14' x2='60' y2='55' class='pose-eq-thin'/>"+
+    "<circle cx='62' cy='58' r='4' class='pose-eq-fill'/>"+
+    "<line x1='12' y1='95' x2='88' y2='95' class='pose-floor'/>",
+
+  standing_cable_press:
+    "<circle cx='50' cy='16' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='24' x2='50' y2='58' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='42' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='58' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='34' x2='80' y2='34' class='pose-body'/>"+
+    "<circle cx='84' cy='34' r='4' class='pose-eq-fill'/>"+
+    "<line x1='84' y1='34' x2='96' y2='34' class='pose-eq-thin'/>"+
+    "<line x1='12' y1='95' x2='88' y2='95' class='pose-floor'/>",
+
+  press_overhead_db:
+    "<circle cx='50' cy='18' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='26' x2='50' y2='58' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='42' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='58' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='30' x2='39' y2='18' class='pose-body'/>"+
+    "<line x1='39' y1='18' x2='30' y2='8' class='pose-body'/>"+
+    "<line x1='50' y1='30' x2='61' y2='18' class='pose-body'/>"+
+    "<line x1='61' y1='18' x2='70' y2='8' class='pose-body'/>"+
+    "<line x1='24' y1='7' x2='36' y2='9' class='pose-eq'/>"+
+    "<circle cx='22' cy='7' r='5' class='pose-eq-fill'/>"+
+    "<circle cx='38' cy='9' r='5' class='pose-eq-fill'/>"+
+    "<line x1='64' y1='9' x2='76' y2='7' class='pose-eq'/>"+
+    "<circle cx='62' cy='9' r='5' class='pose-eq-fill'/>"+
+    "<circle cx='78' cy='7' r='5' class='pose-eq-fill'/>"+
+    "<line x1='12' y1='95' x2='88' y2='95' class='pose-floor'/>",
+
+  squat_barbell:
+    "<circle cx='50' cy='20' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='28' x2='50' y2='52' class='pose-body'/>"+
+    "<line x1='50' y1='52' x2='31' y2='64' class='pose-body'/>"+
+    "<line x1='31' y1='64' x2='35' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='52' x2='69' y2='64' class='pose-body'/>"+
+    "<line x1='69' y1='64' x2='65' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='30' x2='36' y2='24' class='pose-body'/>"+
+    "<line x1='50' y1='30' x2='64' y2='24' class='pose-body'/>"+
+    "<line x1='26' y1='24' x2='74' y2='24' class='pose-eq'/>"+
+    "<circle cx='24' cy='24' r='7' class='pose-eq-fill'/>"+
+    "<circle cx='76' cy='24' r='7' class='pose-eq-fill'/>"+
+    "<line x1='10' y1='95' x2='90' y2='95' class='pose-floor'/>",
+
+  squat_goblet:
+    "<circle cx='50' cy='20' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='28' x2='50' y2='52' class='pose-body'/>"+
+    "<line x1='50' y1='52' x2='31' y2='64' class='pose-body'/>"+
+    "<line x1='31' y1='64' x2='35' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='52' x2='69' y2='64' class='pose-body'/>"+
+    "<line x1='69' y1='64' x2='65' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='32' x2='58' y2='44' class='pose-body'/>"+
+    "<line x1='50' y1='32' x2='42' y2='44' class='pose-body'/>"+
+    "<circle cx='50' cy='48' r='7' class='pose-eq-fill'/>"+
+    "<line x1='10' y1='95' x2='90' y2='95' class='pose-floor'/>",
+
+  lunge:
+    "<circle cx='44' cy='18' r='8' class='pose-head'/>"+
+    "<line x1='44' y1='26' x2='44' y2='53' class='pose-body'/>"+
+    "<line x1='44' y1='53' x2='63' y2='62' class='pose-body'/>"+
+    "<line x1='63' y1='62' x2='59' y2='92' class='pose-body'/>"+
+    "<line x1='44' y1='53' x2='27' y2='68' class='pose-body'/>"+
+    "<line x1='27' y1='68' x2='18' y2='92' class='pose-body'/>"+
+    "<line x1='44' y1='32' x2='37' y2='48' class='pose-body'/>"+
+    "<line x1='44' y1='32' x2='51' y2='48' class='pose-body'/>"+
+    "<line x1='33' y1='48' x2='41' y2='48' class='pose-eq'/>"+
+    "<circle cx='32' cy='48' r='4' class='pose-eq-fill'/>"+
+    "<circle cx='42' cy='48' r='4' class='pose-eq-fill'/>"+
+    "<line x1='47' y1='48' x2='55' y2='48' class='pose-eq'/>"+
+    "<circle cx='46' cy='48' r='4' class='pose-eq-fill'/>"+
+    "<circle cx='56' cy='48' r='4' class='pose-eq-fill'/>"+
+    "<line x1='8' y1='95' x2='75' y2='95' class='pose-floor'/>",
+
+  hinge_db:
+    "<circle cx='26' cy='24' r='8' class='pose-head'/>"+
+    "<line x1='26' y1='32' x2='58' y2='56' class='pose-body'/>"+
+    "<line x1='58' y1='56' x2='54' y2='92' class='pose-body'/>"+
+    "<line x1='58' y1='56' x2='64' y2='92' class='pose-body'/>"+
+    "<line x1='39' y1='40' x2='37' y2='78' class='pose-body'/>"+
+    "<line x1='24' y1='78' x2='32' y2='78' class='pose-eq'/>"+
+    "<circle cx='22' cy='78' r='4.5' class='pose-eq-fill'/>"+
+    "<circle cx='34' cy='78' r='4.5' class='pose-eq-fill'/>"+
+    "<line x1='38' y1='80' x2='46' y2='80' class='pose-eq'/>"+
+    "<circle cx='36' cy='80' r='4.5' class='pose-eq-fill'/>"+
+    "<circle cx='48' cy='80' r='4.5' class='pose-eq-fill'/>"+
+    "<line x1='8' y1='95' x2='90' y2='95' class='pose-floor'/>",
+
+  hinge_barbell:
+    "<circle cx='26' cy='24' r='8' class='pose-head'/>"+
+    "<line x1='26' y1='32' x2='58' y2='56' class='pose-body'/>"+
+    "<line x1='58' y1='56' x2='54' y2='92' class='pose-body'/>"+
+    "<line x1='58' y1='56' x2='64' y2='92' class='pose-body'/>"+
+    "<line x1='39' y1='40' x2='37' y2='78' class='pose-body'/>"+
+    "<line x1='24' y1='78' x2='50' y2='78' class='pose-eq'/>"+
+    "<circle cx='22' cy='78' r='6.5' class='pose-eq-fill'/>"+
+    "<circle cx='52' cy='78' r='6.5' class='pose-eq-fill'/>"+
+    "<line x1='8' y1='95' x2='90' y2='95' class='pose-floor'/>",
+
+  hip_thrust:
+    "<rect x='4' y='40' width='14' height='8' rx='2' class='pose-furniture'/>"+
+    "<circle cx='10' cy='34' r='8' class='pose-head'/>"+
+    "<line x1='16' y1='42' x2='52' y2='58' class='pose-body'/>"+
+    "<line x1='52' y1='58' x2='66' y2='72' class='pose-body'/>"+
+    "<line x1='66' y1='72' x2='60' y2='92' class='pose-body'/>"+
+    "<line x1='44' y1='55' x2='60' y2='55' class='pose-eq'/>"+
+    "<circle cx='42' cy='55' r='6' class='pose-eq-fill'/>"+
+    "<circle cx='62' cy='55' r='6' class='pose-eq-fill'/>"+
+    "<line x1='4' y1='95' x2='90' y2='95' class='pose-floor'/>",
+
+  plank:
+    "<circle cx='84' cy='44' r='8' class='pose-head'/>"+
+    "<line x1='16' y1='80' x2='45' y2='58' class='pose-body'/>"+
+    "<line x1='45' y1='58' x2='76' y2='50' class='pose-body'/>"+
+    "<line x1='74' y1='52' x2='68' y2='80' class='pose-body'/>"+
+    "<line x1='10' y1='84' x2='90' y2='84' class='pose-floor'/>",
+
+  side_plank:
+    "<circle cx='78' cy='40' r='8' class='pose-head'/>"+
+    "<line x1='18' y1='78' x2='45' y2='56' class='pose-body'/>"+
+    "<line x1='45' y1='56' x2='72' y2='44' class='pose-body'/>"+
+    "<line x1='70' y1='46' x2='66' y2='76' class='pose-body'/>"+
+    "<line x1='55' y1='48' x2='50' y2='16' class='pose-body'/>"+
+    "<line x1='14' y1='82' x2='90' y2='82' class='pose-floor'/>",
+
+  ab_wheel:
+    "<circle cx='24' cy='50' r='8' class='pose-head'/>"+
+    "<line x1='28' y1='56' x2='60' y2='80' class='pose-body'/>"+
+    "<line x1='60' y1='80' x2='66' y2='92' class='pose-body'/>"+
+    "<line x1='30' y1='58' x2='16' y2='80' class='pose-body'/>"+
+    "<circle cx='13' cy='84' r='7' class='pose-eq-thin'/>"+
+    "<circle cx='13' cy='84' r='2' class='pose-eq-fill'/>"+
+    "<line x1='8' y1='94' x2='90' y2='94' class='pose-floor'/>",
+
+  hanging:
+    "<line x1='16' y1='10' x2='84' y2='10' class='pose-eq'/>"+
+    "<circle cx='16' cy='10' r='4' class='pose-eq-fill'/>"+
+    "<circle cx='84' cy='10' r='4' class='pose-eq-fill'/>"+
+    "<circle cx='50' cy='26' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='18' x2='34' y2='10' class='pose-body'/>"+
+    "<line x1='50' y1='18' x2='66' y2='10' class='pose-body'/>"+
+    "<line x1='50' y1='34' x2='50' y2='62' class='pose-body'/>"+
+    "<line x1='50' y1='62' x2='44' y2='92' class='pose-body'/>"+
+    "<line x1='50' y1='62' x2='56' y2='92' class='pose-body'/>",
+
+  hanging_legs_raised:
+    "<line x1='16' y1='10' x2='84' y2='10' class='pose-eq'/>"+
+    "<circle cx='16' cy='10' r='4' class='pose-eq-fill'/>"+
+    "<circle cx='84' cy='10' r='4' class='pose-eq-fill'/>"+
+    "<circle cx='50' cy='26' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='18' x2='34' y2='10' class='pose-body'/>"+
+    "<line x1='50' y1='18' x2='66' y2='10' class='pose-body'/>"+
+    "<line x1='50' y1='34' x2='50' y2='58' class='pose-body'/>"+
+    "<line x1='50' y1='58' x2='68' y2='66' class='pose-body'/>"+
+    "<line x1='68' y1='66' x2='80' y2='58' class='pose-body'/>",
+
+  dip:
+    "<rect x='27' y='68' width='6' height='10' rx='1' class='pose-furniture'/>"+
+    "<rect x='67' y='68' width='6' height='10' rx='1' class='pose-furniture'/>"+
+    "<line x1='30' y1='28' x2='30' y2='68' class='pose-eq'/>"+
+    "<line x1='70' y1='28' x2='70' y2='68' class='pose-eq'/>"+
+    "<circle cx='50' cy='24' r='8' class='pose-head'/>"+
+    "<line x1='50' y1='32' x2='50' y2='62' class='pose-body'/>"+
+    "<line x1='50' y1='36' x2='30' y2='42' class='pose-body'/>"+
+    "<line x1='50' y1='36' x2='70' y2='42' class='pose-body'/>"+
+    "<line x1='50' y1='62' x2='43' y2='76' class='pose-body'/>"+
+    "<line x1='43' y1='76' x2='50' y2='88' class='pose-body'/>",
+
+  bench_dip:
+    "<rect x='4' y='48' width='20' height='6' rx='2' class='pose-furniture'/>"+
+    "<rect x='12' y='54' width='5' height='12' rx='1' class='pose-furniture'/>"+
+    "<circle cx='64' cy='56' r='8' class='pose-head'/>"+
+    "<line x1='58' y1='62' x2='34' y2='56' class='pose-body'/>"+
+    "<line x1='34' y1='56' x2='22' y2='49' class='pose-body'/>"+
+    "<line x1='58' y1='62' x2='82' y2='70' class='pose-body'/>"+
+    "<line x1='82' y1='70' x2='90' y2='90' class='pose-body'/>"+
+    "<line x1='4' y1='94' x2='94' y2='94' class='pose-floor'/>"
+};
+
+
+var EXERCISE_POSE = {
+  "Press banca con mancuernas":"bench_press_db",
+  "Press banca con barra":"bench_press_barbell",
+  "Press inclinado con mancuerna":"bench_press_db",
+  "Press en máquina":"seated_machine",
+  "Aperturas en polea":"standing_cable_fly",
+  "Fondos en paralelas":"dip",
+  "Jalón al pecho agarre ancho":"seated_machine",
+  "Dominadas asistidas":"hanging",
+  "Jalón agarre cerrado":"seated_machine",
+  "Pull-over en polea":"standing_cable_pullover",
+  "Remo con barra":"standing_row",
+  "Remo en polea baja":"seated_machine",
+  "Remo con mancuerna a un brazo":"standing_row_db",
+  "Remo en máquina":"seated_machine",
+  "Elevaciones laterales con mancuernas":"standing_raise_db",
+  "Press militar con mancuernas":"press_overhead_db",
+  "Press Arnold":"press_overhead_db",
+  "Elevaciones frontales":"standing_raise_db",
+  "Curl con mancuernas":"standing_dumbbell_curl",
+  "Curl con barra":"standing_barbell_curl",
+  "Curl martillo":"standing_dumbbell_curl",
+  "Curl en polea":"standing_cable_curl",
+  "Extensión en polea":"standing_cable_pushdown",
+  "Fondos en banco":"bench_dip",
+  "Press francés":"skullcrusher",
+  "Press cerrado en polea":"standing_cable_pushdown",
+  "Sentadilla goblet con mancuerna":"squat_goblet",
+  "Sentadilla búlgara con mancuernas":"lunge",
+  "Prensa de piernas":"leg_press",
+  "Zancadas con mancuernas":"lunge",
+  "Sentadilla con barra":"squat_barbell",
+  "Extensión de cuádriceps en máquina":"leg_machine",
+  "Peso muerto rumano con mancuernas":"hinge_db",
+  "Peso muerto rumano con barra":"hinge_barbell",
+  "Hip thrust con barra":"hip_thrust",
+  "Curl femoral en máquina":"leg_machine",
+  "Plancha frontal":"plank",
+  "Pallof press":"standing_cable_press",
+  "Elevación de piernas colgado":"hanging_legs_raised",
+  "Rueda abdominal":"ab_wheel",
+  "Plancha lateral":"side_plank"
+};
+
+function poseSVG(name){
+  var pose = EXERCISE_POSE[name];
+  if(!pose || !POSE_SVG[pose]) return "";
+  return "<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>"+POSE_SVG[pose]+"</svg>";
+}
+
+// ---------- Chips de grupo muscular ----------
+function buildGroupChips(){
+  var cont = document.getElementById("groupChips");
+  if(cont.dataset.built) return;
+  cont.dataset.built = "1";
+
+  var allChip = document.createElement("button");
+  allChip.type = "button";
+  allChip.className = "chip active";
+  allChip.textContent = "Todos";
+  allChip.addEventListener("click", function(){
+    selectedGuideGroup = null;
+    renderGuideResults();
+  });
+  cont.appendChild(allChip);
+
+  Object.keys(GROUP_LABEL).forEach(function(group){
+    var chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "chip";
+    chip.textContent = GROUP_LABEL[group];
+    chip.addEventListener("click", function(){
+      selectedGuideGroup = group;
+      renderGuideResults();
+    });
+    cont.appendChild(chip);
+  });
+}
+
+function updateChipStates(){
+  var chips = document.querySelectorAll("#groupChips .chip");
+  chips.forEach(function(chip, i){
+    var isAll = i === 0;
+    var isActive = isAll ? (selectedGuideGroup === null) : (chip.textContent === GROUP_LABEL[selectedGuideGroup]);
+    chip.classList.toggle("active", isActive);
+  });
+}
+
+function renderGuideResults(){
+  buildGroupChips();
+  updateChipStates();
+  var input = document.getElementById("guideSearch");
+  var query = normalize(input.value.trim());
+  var cont = document.getElementById("guideResults");
+  cont.innerHTML = "";
+
+  var matches = ALL_EXERCISES.filter(function(ex){
+    var matchesGroup = !selectedGuideGroup || ex.group === selectedGuideGroup;
+    var matchesText = !query ||
+      normalize(ex.name).indexOf(query) !== -1 ||
+      normalize(displayName(ex.name)).indexOf(query) !== -1;
+    return matchesGroup && matchesText;
+  });
+
+  if(matches.length === 0){
+    cont.innerHTML = "<div class='guide-empty'>No encontramos ningún ejercicio con ese nombre.</div>";
+    return;
+  }
+
+  matches.forEach(function(ex){
+    var row = document.createElement("div");
+    row.className = "guide-result" + (ex.name === selectedGuideExercise ? " active" : "");
+    row.innerHTML =
+      "<span class='rname'>"+displayName(ex.name)+"</span>"+
+      "<span class='rgroup'>"+GROUP_LABEL[ex.group]+"</span>";
+    row.addEventListener("click", function(){
+      selectedGuideExercise = ex.name;
+      renderGuideResults();
+      renderGuideCard();
+    });
+    cont.appendChild(row);
+  });
+}
+
+function buildGuideHead(head){
+  var name = selectedGuideExercise;
+  var custom = customNames[name];
+  head.innerHTML = "";
+
+  var titleWrap = document.createElement("div");
+  titleWrap.className = "guide-title-wrap";
+
+  var h3 = document.createElement("h3");
+  h3.textContent = custom || name;
+  titleWrap.appendChild(h3);
+
+  if(custom){
+    var origLbl = document.createElement("span");
+    origLbl.className = "guide-original-name";
+    origLbl.textContent = "Nombre original: " + name;
+    titleWrap.appendChild(origLbl);
+  }
+  head.appendChild(titleWrap);
+
+  var actions = document.createElement("div");
+  actions.className = "guide-head-actions";
+
+  var editBtn = document.createElement("button");
+  editBtn.type = "button";
+  editBtn.className = "icon-btn";
+  editBtn.title = "Cambiar nombre";
+  editBtn.innerHTML = "<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'></path><path d='M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z'></path></svg>";
+  editBtn.addEventListener("click", function(){ enterRenameMode(head); });
+  actions.appendChild(editBtn);
+
+  if(custom){
+    var resetBtn = document.createElement("button");
+    resetBtn.type = "button";
+    resetBtn.className = "reset-btn";
+    resetBtn.textContent = "Restablecer nombre";
+    resetBtn.addEventListener("click", function(){
+      delete customNames[name];
+      storeSet("customNames", customNames);
+      renderGuideCard();
+      renderGuideResults();
+      renderRutina();
+      renderSwap();
+    });
+    actions.appendChild(resetBtn);
+  }
+
+  head.appendChild(actions);
+}
+
+function enterRenameMode(head){
+  var name = selectedGuideExercise;
+  head.innerHTML = "";
+
+  var input = document.createElement("input");
+  input.type = "text";
+  input.className = "rename-input";
+  input.value = customNames[name] || name;
+  input.placeholder = "Nombre para mostrar";
+  head.appendChild(input);
+
+  var actions = document.createElement("div");
+  actions.className = "guide-head-actions";
+
+  function save(){
+    var val = input.value.trim();
+    if(!val || val === name){
+      delete customNames[name];
+    } else {
+      customNames[name] = val;
+    }
+    storeSet("customNames", customNames);
+    renderGuideCard();
+    renderGuideResults();
+    renderRutina();
+    renderSwap();
+  }
+
+  var saveBtn = document.createElement("button");
+  saveBtn.type = "button";
+  saveBtn.className = "reset-btn";
+  saveBtn.textContent = "Guardar";
+  saveBtn.addEventListener("click", save);
+  actions.appendChild(saveBtn);
+
+  var cancelBtn = document.createElement("button");
+  cancelBtn.type = "button";
+  cancelBtn.className = "reset-btn";
+  cancelBtn.textContent = "Cancelar";
+  cancelBtn.addEventListener("click", function(){ renderGuideCard(); });
+  actions.appendChild(cancelBtn);
+
+  head.appendChild(actions);
+
+  input.addEventListener("keydown", function(e){
+    if(e.key === "Enter") save();
+    if(e.key === "Escape") renderGuideCard();
+  });
+  input.focus();
+  input.select();
+}
+
+function renderGuideCard(){
+  var cont = document.getElementById("guideCard");
+  cont.innerHTML = "";
+  var guide = EXERCISE_GUIDE[selectedGuideExercise];
+  if(!guide){
+    cont.innerHTML = "<p class='swap-intro'>Todavía no hay guía cargada para este ejercicio.</p>";
+    return;
+  }
+  var card = document.createElement("div");
+  card.className = "guide-card";
+
+  var head = document.createElement("div");
+  head.className = "guide-head";
+  buildGuideHead(head);
+  card.appendChild(head);
+
+  var rest = document.createElement("div");
+  rest.innerHTML =
+    "<div class='guide-pose'>"+poseSVG(selectedGuideExercise)+"</div>"+
+    "<div class='guide-section'><p class='guide-label'>Cómo armarlo</p><p class='guide-text'>"+guide.setup+"</p></div>"+
+    "<div class='guide-section'><p class='guide-label'>Ejecución</p><p class='guide-text'>"+guide.ejecucion+"</p></div>"+
+    "<div class='guide-section'><p class='guide-label'>Errores comunes</p><p class='guide-text'>"+guide.errores+"</p></div>";
+  while(rest.firstChild) card.appendChild(rest.firstChild);
+
+  cont.appendChild(card);
+}
+
+function renderGuide(){
+  var input = document.getElementById("guideSearch");
+  if(!input.dataset.wired){
+    input.dataset.wired = "1";
+    input.addEventListener("input", renderGuideResults);
+  }
+  renderGuideResults();
+  renderGuideCard();
+}
+
+// ---------- Timer de descanso ----------
+var restRemaining = 0;
+var restRunning = false;
+var restInterval = null;
+
+function formatClock(totalSecs){
+  var m = Math.floor(totalSecs / 60);
+  var s = totalSecs % 60;
+  return (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+}
+
+function beep(){
+  try{
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.35);
+  }catch(e){ /* silencio si el navegador no permite audio */ }
+}
+
+function updateRestDisplay(){
+  document.getElementById("rtClock").textContent = formatClock(Math.max(restRemaining,0));
+}
+
+function tickRest(){
+  restRemaining--;
+  if(restRemaining <= 0){
+    clearInterval(restInterval);
+    restInterval = null;
+    restRunning = false;
+    updateRestDisplay();
+    document.getElementById("rtPause").textContent = "Iniciar";
+    beep();
+    return;
+  }
+  updateRestDisplay();
+}
+
+function startRestTimer(seconds, label){
+  clearInterval(restInterval);
+  restRemaining = seconds;
+  restRunning = true;
+  document.getElementById("rtLabel").textContent = "Descanso · " + label;
+  document.getElementById("rtPause").textContent = "Pausar";
+  updateRestDisplay();
+  document.getElementById("restTimer").classList.add("active");
+  restInterval = setInterval(tickRest, 1000);
+}
+
+document.getElementById("rtPause").addEventListener("click", function(){
+  if(restRunning){
+    clearInterval(restInterval);
+    restInterval = null;
+    restRunning = false;
+    this.textContent = "Iniciar";
+  } else if(restRemaining > 0){
+    restRunning = true;
+    this.textContent = "Pausar";
+    restInterval = setInterval(tickRest, 1000);
+  }
+});
+document.getElementById("rtMinus15").addEventListener("click", function(){
+  restRemaining = Math.max(restRemaining - 15, 0);
+  updateRestDisplay();
+});
+document.getElementById("rtPlus15").addEventListener("click", function(){
+  restRemaining += 15;
+  updateRestDisplay();
+});
+document.getElementById("rtClose").addEventListener("click", function(){
+  clearInterval(restInterval);
+  restInterval = null;
+  restRunning = false;
+  document.getElementById("restTimer").classList.remove("active");
+});
+
+// ---------- Render Info general ----------
+var GLOSARIO = [
+  {term:"RPE (Esfuerzo Percibido)", def:"Escala de 1 a 10 que mide qué tan cerca del fallo terminó una serie. RPE 8 significa que, con buena técnica, te quedaban 2 repeticiones más en el tanque. RPE 9-10 es casi al fallo o al fallo."},
+  {term:"RIR (Repeticiones en Reserva)", def:"La otra cara del RPE: cuántas repeticiones te quedaban antes del fallo. RIR 2 equivale aproximadamente a RPE 8."},
+  {term:"Progresión doble", def:"Método para subir de peso: primero aumentás repeticiones dentro de un rango (por ejemplo de 12 a 15), y recién cuando llegás al techo del rango en todas las series, subís el peso y volvés al piso de repeticiones del bloque."},
+  {term:"Bloque / periodización", def:"Divide el programa en tramos de varias semanas con un objetivo distinto cada uno (adaptación, intensificación, consolidación). Permite progresar de forma ordenada en vez de subir todo a la vez."},
+  {term:"Frecuencia de entrenamiento", def:"Cuántas veces por semana trabajás un mismo grupo muscular. Este programa es full body 3 veces por semana: cada grupo importante se estimula 2 o más veces semanales, lo que ayuda a mantener masa muscular estando en déficit."},
+  {term:"Déficit calórico", def:"Consumir menos calorías de las que el cuerpo gasta, para perder grasa. Un déficit moderado (15-20% por debajo del mantenimiento) ayuda a preservar mejor la masa muscular que uno agresivo."},
+  {term:"Mantenimiento de masa muscular", def:"El objetivo de este programa no es levantar cada vez más peso a toda costa, sino sostener la fuerza y el músculo mientras perdés grasa. Por eso el volumen es moderado: lo justo para mandarle al músculo la señal de 'seguí acá', sin generar más fatiga de la que el déficit te permite recuperar."},
+  {term:"Fallo muscular", def:"El punto en una serie donde ya no podés completar otra repetición con buena técnica. Este programa evita entrenar al fallo en la mayoría de las series para cuidar la recuperación, que ya está reducida por el déficit."},
+  {term:"Superserie", def:"Dos ejercicios que se hacen uno después del otro, casi sin descanso entre ellos, para ahorrar tiempo. Útil si algún día te queda justo el tiempo de 90 minutos."},
+  {term:"Descanso entre series", def:"En los ejercicios principales descansá 90 segundos a 2 minutos; en los accesorios, 60-90 segundos alcanza. Esto es clave para no pasarte de los 90 minutos por sesión."}
+];
+
+function renderInfo(){
+  var cont = document.getElementById("infoContainer");
+  cont.innerHTML = "";
+  GLOSARIO.forEach(function(item){
+    var row = document.createElement("div");
+    row.className = "day-card";
+    row.innerHTML = "<div class='day-head'><h3>"+item.term+"</h3></div>"+
+      "<div class='ex-row' style='display:block;'><p style='margin:0;font-size:13.5px;color:var(--chalk-dim);line-height:1.55;'>"+item.def+"</p></div>";
+    cont.appendChild(row);
+  });
+}
+
+document.getElementById("resetAll").addEventListener("click", function(){
+  overrides = {};
+  storeSet("overrides", overrides);
+  renderSwap();
+  renderRutina();
+});
+
+// ---------- Tabs ----------
+document.querySelectorAll(".tab-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    document.querySelectorAll(".tab-btn").forEach(function(b){ b.classList.remove("active"); });
+    document.querySelectorAll(".panel").forEach(function(p){ p.classList.remove("active"); });
+    btn.classList.add("active");
+    document.getElementById("panel-"+btn.dataset.tab).classList.add("active");
+  });
+});
+
+renderRutina();
+renderSwap();
+renderGuide();
+renderInfo();
+</script>
+</body>
+</html>
